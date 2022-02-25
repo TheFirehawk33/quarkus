@@ -23,6 +23,24 @@ public class TournamentResourceTest {
     }
 
     @Test
+    public void create_should_returnBadRequest() {
+
+        StatusAndContent<CreateResponse> response = TournamentUtils.createTournament(null);
+
+        assertThat(response.statusCode, is(400));
+        assertThat(response.content.id, is(null));
+    }
+
+    @Test
+    public void create_should_returnAlreadyExist() {
+
+        StatusAndContent<CreateResponse> response = TournamentUtils.createTournament("Unreal Tournament");
+
+        assertThat(response.statusCode, is(302));
+        assertThat(response.content.id, is(notNullValue()));
+    }
+
+    @Test
     public void get_should_return_created_tournament() {
         String tournamentName = "New tournament";
 
@@ -32,4 +50,11 @@ public class TournamentResourceTest {
         assertThat(getResponse.statusCode, is(200));
         assertThat(getResponse.content.name, is(tournamentName));
     }
+
+    @Test
+    public void startTournament_should_delete_TournamentToCreate() {
+        //ptdr je sais pas quoi faire en fait
+    }
 }
+
+

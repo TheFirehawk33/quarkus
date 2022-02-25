@@ -12,13 +12,13 @@ public class TournamentRepository {
 
     private static final HashMap<String, Tournament> Tournaments = new HashMap<>();
 
-    public String create(TournamentToCreate tournament) {
+    public static String create(TournamentToCreate tournament) {
         String id = UUID.randomUUID().toString();
         Tournaments.put(id, new Tournament(tournament.name));
         return id;
     }
 
-    public Tournament get(String id) {
+    public static Tournament get(String id) {
         return Tournaments.get(id);
     }
 }
