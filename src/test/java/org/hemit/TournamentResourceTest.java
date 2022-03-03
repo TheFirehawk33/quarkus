@@ -36,7 +36,6 @@ public class TournamentResourceTest {
         StatusAndContent<CreateResponse> response = TournamentUtils.createTournament(null);
 
         assertThat(response.statusCode, is(400));
-        assertThat(response.content.id, is(null));
     }
 
     @Test
@@ -45,7 +44,6 @@ public class TournamentResourceTest {
         StatusAndContent<CreateResponse> response = TournamentUtils.createTournament("");
 
         assertThat(response.statusCode, is(400));
-        assertThat(response.content.id, is(null));
     }
 
     @Test
@@ -55,7 +53,6 @@ public class TournamentResourceTest {
         StatusAndContent<CreateResponse> response = TournamentUtils.createTournament("Unreal Tournament");
 
         assertThat(response.statusCode, is(400));
-        assertThat(response.content.id, is(notNullValue()));
     }
 
     @Test
