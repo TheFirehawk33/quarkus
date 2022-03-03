@@ -74,7 +74,6 @@ public class TournamentResourceTest {
         StatusAndContent<Tournament> getResponse = TournamentUtils.getTournamentById(null);
 
         assertThat(getResponse.statusCode, is(404));
-        assertThat(getResponse.content.name, is(null));
     }
 
     @Test
@@ -82,7 +81,6 @@ public class TournamentResourceTest {
         StatusAndContent<Tournament> getResponse = TournamentUtils.getTournamentById("AAAAA");
 
         assertThat(getResponse.statusCode, is(404));
-        assertThat(getResponse.content.name, is(null));
     }
 }
 

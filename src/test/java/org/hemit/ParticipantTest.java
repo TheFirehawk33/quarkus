@@ -10,13 +10,13 @@ import static org.hamcrest.MatcherAssert.assertThat;
 public class ParticipantTest {
 
         @Test
-        public void create_should_return_uuid(){
+        public void create_should_return_id(){
                 Participant bob = new Participant("bob",120,"12");
                 assertThat(bob.getId(), is(12));
         }
 
         @Test
-        public void create_should_return() {
+        public void create_should_return_() {
 
         }
 }
