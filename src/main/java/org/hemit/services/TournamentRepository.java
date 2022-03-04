@@ -10,15 +10,27 @@ import java.util.UUID;
 @ApplicationScoped
 public class TournamentRepository {
 
-    private static final HashMap<String, Tournament> Tournaments = new HashMap<>();
+    private static final HashMap<String, Tournament> tournaments = new HashMap<>();
 
-    public String create(TournamentToCreate tournament) {
+    public static String create(TournamentToCreate tournament) {
         String id = UUID.randomUUID().toString();
-        Tournaments.put(id, new Tournament(tournament.name));
+        tournaments.put(id, new Tournament(tournament.name));
         return id;
     }
 
-    public Tournament get(String id) {
-        return Tournaments.get(id);
+    public static Tournament getById(String id) {
+        return tournaments.get(id);
     }
+
+    public static Tournament getByName(String name)
+    {
+        for(Tournament tournament : tournaments.values())
+        {
+            if(tournament.name.equals(name))
+                return tournament;
+        }
+        return null;
+    }
+    public static void cleanLocalBase(){
+        tournaments.clear();}
 }
