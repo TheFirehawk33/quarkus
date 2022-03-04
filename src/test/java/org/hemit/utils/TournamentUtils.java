@@ -33,12 +33,12 @@ public class TournamentUtils {
         int statusCode = response.extract().statusCode();
         Tournament content = null;
 
-        if(response.extract() == null) {
-            statusCode = 404;
-        }
-
-        if (statusCode == 200) {
+        try {
             content = response.extract().as(Tournament.class);
+        } catch(Exception e) {
+            if(statusCode == 204) {
+                statusCode = 404;
+            }
         }
 
         return new StatusAndContent<>(statusCode, content);
