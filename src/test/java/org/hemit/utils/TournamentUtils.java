@@ -6,6 +6,8 @@ import org.hemit.model.CreateResponse;
 import org.hemit.model.Tournament;
 import org.hemit.model.TournamentToCreate;
 
+import javax.ws.rs.core.Response;
+
 import static io.restassured.RestAssured.given;
 import static io.restassured.RestAssured.when;
 
@@ -33,13 +35,8 @@ public class TournamentUtils {
         int statusCode = response.extract().statusCode();
         Tournament content = null;
 
-        try {
+        if(statusCode == Response.Status.FOUND.getStatusCode())
             content = response.extract().as(Tournament.class);
-        } catch(Exception e) {
-            if(statusCode == 204) {
-                statusCode = 404;
-            }
-        }
 
         return new StatusAndContent<>(statusCode, content);
     }

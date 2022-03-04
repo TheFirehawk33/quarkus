@@ -8,6 +8,8 @@ import org.hemit.utils.TournamentUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import javax.ws.rs.core.Response;
+
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -62,7 +64,7 @@ public class TournamentResourceTest {
         StatusAndContent<CreateResponse> createResponse = TournamentUtils.createTournament(tournamentName);
         StatusAndContent<Tournament> getResponse = TournamentUtils.getTournamentById(createResponse.content.id);
 
-        assertThat(getResponse.statusCode, is(200));
+        assertThat(getResponse.statusCode, is(Response.Status.FOUND.getStatusCode()));
         assertThat(getResponse.content.name, is(tournamentName));
     }
 

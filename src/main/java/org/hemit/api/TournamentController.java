@@ -33,8 +33,12 @@ public class TournamentController {
 
     @GET
     @Path("{id}")
-    public Tournament getTournamentById(@PathParam("id") String id) {
-        return tournamentRepository.getById(id);
+    public Response getTournamentById(@PathParam("id") String id) {
+        Tournament result = tournamentRepository.getById(id);
+        if(result == null)
+            return Response.status(Response.Status.NOT_FOUND).build();
+        return Response.status(Response.Status.FOUND).entity(result).build();
+
     }
 
     private boolean validateTournament(TournamentToCreate tournament) {
