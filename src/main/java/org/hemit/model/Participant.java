@@ -1,10 +1,20 @@
 package org.hemit.model;
 
+import io.quarkus.mongodb.panache.PanacheMongoEntity;
+import io.quarkus.mongodb.panache.common.MongoEntity;
+import org.bson.codecs.pojo.annotations.BsonProperty;
+
 import java.util.UUID;
 
-public class Participant {
+@MongoEntity(collection="ThePerson")
+public class Participant extends PanacheMongoEntity {
+    @BsonProperty("name")
     String name;
+
+    @BsonProperty("elo")
     int elo;
+
+    @BsonProperty("_id")
     String id;
 
     public Participant(String name, int elo, String id) {
