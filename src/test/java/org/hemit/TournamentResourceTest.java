@@ -4,6 +4,7 @@ import io.quarkus.test.junit.QuarkusTest;
 import org.hemit.model.CreateResponse;
 import org.hemit.model.Tournament;
 import org.hemit.services.TournamentRepository;
+import org.hemit.utils.ParticipantUtils;
 import org.hemit.utils.TournamentUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -88,7 +89,7 @@ public class TournamentResourceTest {
         StatusAndContent<Tournament> getResponse = TournamentUtils.getTournamentById(creationResponse.content.id);
 
         assertThat(getResponse.statusCode, is(200));
-        assertTrue(getResponse.content.participants.isEmpty());
+        assertTrue(getResponse.content.getParticipants().isEmpty());
 
     }
 
@@ -111,6 +112,65 @@ public class TournamentResourceTest {
         StatusAndContent<Tournament> response = TournamentUtils.getTournamentById("");
 
         assertThat(response.statusCode, is(405));
+    }
+
+    @Test
+    public void del_participantInTournament_withoutId_should_returnNotFound() {
+       Response.Status response = TournamentUtils.delParticipant(null,null);
+
+       assertThat(response, is(404));
+    }
+
+    @Test
+    public void del_participantInTournament_withUnknownId_should_returnNotFound(){
+        Response.Status response = TournamentUtils.delParticipant("toto",null);
+
+        assertThat(response, is(404));
+    }
+
+    @Test
+    public void del_participantInTournament_emptyId_should_returnNotFound(){
+        Response.Status response = TournamentUtils.delParticipant("",null);
+
+        assertThat(response, is(404));
+    }
+
+    @Test
+    public void del_participant_withoutId_should_returnNotFound(){
+        StatusAndContent<CreateResponse> createResponse = TournamentUtils.createTournament("newName");
+        Response.Status response = TournamentUtils.delParticipant(createResponse.content.id,null);
+
+        assertThat(response, is(404));
+    }
+
+    @Test
+    public void del_participant_withUnknownId_should_returnNotFound(){
+        StatusAndContent<CreateResponse> createTournamentResponse = TournamentUtils.createTournament("newName");
+        ParticipantUtils.createParticipant("newName",0,"12");
+
+        Response.Status response = TournamentUtils.delParticipant(createTournamentResponse.content.id,"1");
+
+        assertThat(response, is(404));
+    }
+
+    @Test
+    public void del_participant_emptyId_should_returnNotFound(){
+        StatusAndContent<CreateResponse> createTournamentResponse = TournamentUtils.createTournament("newName");
+
+        Response.Status response = TournamentUtils.delParticipant(createTournamentResponse.content.id,null);
+
+        assertThat(response, is(404));
+    }
+
+    @Test
+    public void del_participant_nominal()
+    {
+        StatusAndContent<CreateResponse> createTournamentResponse = TournamentUtils.createTournament("newName");
+        StatusAndContent<CreateResponse> createParticipantResponse = ParticipantUtils.createParticipant("newName",0,"12");
+
+        Response.Status response = TournamentUtils.delParticipant(createTournamentResponse.content.id,createParticipantResponse.content.id);
+
+        assertThat(response, is(Response.Status.OK));
     }
 }
 

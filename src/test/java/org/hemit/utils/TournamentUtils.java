@@ -30,14 +30,29 @@ public class TournamentUtils {
     }
 
     public static StatusAndContent<Tournament> getTournamentById(String id) {
-        ValidatableResponse response = when().get("/tournaments/"+id).then();
+        ValidatableResponse response = when().get("/tournaments/" + id).then();
 
         int statusCode = response.extract().statusCode();
         Tournament content = null;
 
-        if(statusCode == Response.Status.OK.getStatusCode())
+        if (statusCode == Response.Status.OK.getStatusCode())
             content = response.extract().as(Tournament.class);
 
         return new StatusAndContent<>(statusCode, content);
     }
+
+    public static Response.Status delParticipant(String tournamentId, String participantId) {
+        ValidatableResponse response = when().delete("/tournaments/" + tournamentId + "/" + participantId).then();
+
+        int statusCode = response.extract().statusCode();
+        Tournament content = null;
+
+        //TODO add real DB connexion
+
+        if (statusCode == Response.Status.OK.getStatusCode())
+            content = response.extract().as(Tournament.class);
+
+        return Response.Status.OK;
+    }
+
 }
