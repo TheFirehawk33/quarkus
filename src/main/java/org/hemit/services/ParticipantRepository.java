@@ -1,36 +1,17 @@
 package org.hemit.services;
 
+import io.quarkus.mongodb.panache.PanacheMongoRepository;
 import org.hemit.model.Participant;
-import org.hemit.model.Tournament;
 
 import javax.enterprise.context.ApplicationScoped;
-import java.util.HashMap;
-import java.util.UUID;
 
 @ApplicationScoped
-public class ParticipantRepository {
+public class ParticipantRepository implements PanacheMongoRepository<Participant> {
 
-    private static final HashMap<String, Participant> participants = new HashMap<>();
-
-    public static String create(Participant participant) {
-        String id = UUID.randomUUID().toString();
-        participants.put(id, new Participant(participant.getName(), participant.getElo(), participant.getId()));
-        return id;
-    }
-
-    public static Participant getById(String id) {
-        return participants.get(id);
-    }
-
-    public static Participant getByName(String name) {
-        for (Participant participant : participants.values()) {
-            if (participant.getName().equals(name))
-                return participant;
-        }
-        return null;
+    public Participant findByName(String name) {
+        return find("name", name).firstResult();
     }
 
     public static void cleanLocalBase() {
-        participants.clear();
     }
 }

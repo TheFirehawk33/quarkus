@@ -4,7 +4,6 @@ import io.restassured.response.ValidatableResponse;
 import org.hemit.StatusAndContent;
 import org.hemit.model.CreateResponse;
 import org.hemit.model.Tournament;
-import org.hemit.model.TournamentToCreate;
 
 import javax.ws.rs.core.Response;
 
@@ -15,7 +14,7 @@ public class TournamentUtils {
     public static StatusAndContent<CreateResponse> createTournament(String tournamentName) {
         ValidatableResponse response = given()
                 .contentType("application/json")
-                .body(new TournamentToCreate(tournamentName))
+                .body(new Tournament(tournamentName))
                 .when()
                 .post("/tournaments")
                 .then();
@@ -35,9 +34,14 @@ public class TournamentUtils {
         int statusCode = response.extract().statusCode();
         Tournament content = null;
 
-        if(statusCode == Response.Status.OK.getStatusCode())
+        if(statusCode == Response.Status.OK.getStatusCode()) {
             content = response.extract().as(Tournament.class);
+        }
 
         return new StatusAndContent<>(statusCode, content);
+    }
+
+    public static StatusAndContent<Tournament> getTournamentByS(String id) {
+        return null;
     }
 }

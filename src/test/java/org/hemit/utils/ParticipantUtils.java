@@ -10,10 +10,10 @@ import static io.restassured.RestAssured.when;
 
 public class ParticipantUtils {
 
-    public static StatusAndContent<CreateResponse> createParticipant(String participantName,int participantElo, String participantId) {
+    public static StatusAndContent<CreateResponse> createParticipant(String participantName,int participantElo) {
         ValidatableResponse response = given()
                 .contentType("application/json")
-                .body(new Participant(participantName,participantElo,participantId))
+                .body(new Participant(participantName,participantElo))
                 .when()
                 .post("/participants")
                 .then();

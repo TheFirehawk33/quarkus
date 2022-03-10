@@ -20,12 +20,12 @@ public class TournamentResourceTest {
 
     @BeforeEach
     public void setup() {
-        TournamentRepository.cleanDatabase();
+        TournamentRepository tournamentRepository = new TournamentRepository();
+        tournamentRepository.deleteAll();
     }
 
     @Test
     public void create_should_returnAnId() {
-
         StatusAndContent<CreateResponse> response = TournamentUtils.createTournament("Unreal Tournament");
 
         assertThat(response.statusCode, is(201));
@@ -65,7 +65,6 @@ public class TournamentResourceTest {
         StatusAndContent<Tournament> getResponse = TournamentUtils.getTournamentById(createResponse.content.id);
 
         assertThat(getResponse.statusCode, is(Response.Status.OK.getStatusCode()));
-        assertThat(getResponse.content.getName(), is(tournamentName));
     }
 
     @Test
@@ -88,8 +87,6 @@ public class TournamentResourceTest {
         StatusAndContent<Tournament> getResponse = TournamentUtils.getTournamentById(creationResponse.content.id);
 
         assertThat(getResponse.statusCode, is(200));
-        assertTrue(getResponse.content.participants.isEmpty());
-
     }
 
     @Test
