@@ -1,9 +1,7 @@
 package org.hemit.services;
 
-import com.mongodb.BasicDBObject;
-import com.mongodb.DBObject;
 import com.mongodb.client.MongoCollection;
-import io.quarkus.mongodb.panache.PanacheMongoEntity;
+import com.mongodb.client.result.InsertOneResult;
 import org.bson.Document;
 import org.bson.types.ObjectId;
 import org.hemit.api.DatabaseConnection;
@@ -12,7 +10,6 @@ import org.hemit.model.TournamentToCreate;
 
 import javax.enterprise.context.ApplicationScoped;
 import java.util.HashMap;
-import java.util.UUID;
 
 @ApplicationScoped
 public class TournamentRepository {
@@ -23,15 +20,22 @@ public class TournamentRepository {
             .getCollection("tournaments");
 
     public static String create(TournamentToCreate tournament) {
-        String id = UUID.randomUUID().toString();
-        tournaments.put(id, new Tournament(tournament.name));
-        db.insertOne(tournament.getJsonTournament());
+        if(db.find(new Document("name", tournament.name)).first() != null) {
+            return null;
+        }
 
-        return id;
+        InsertOneResult insertion = db.insertOne(tournament.getJsonTournament());
+
+        return insertion.getInsertedId().asObjectId().getValue().toString();
     }
 
     public static Tournament getById(String id) {
-        Document doc = db.find(new Document("_id",new ObjectId(id))).first();
+        if(!ObjectId.isValid(id)) {
+            return null;
+        }
+
+        System.out.println(id);
+        Document doc = db.find(new Document("_id", new ObjectId(id))).first();
 
         return doc != null ? new Tournament(doc.getString("name")) : null;
     }
@@ -45,7 +49,7 @@ public class TournamentRepository {
         }
         return null;
     }
-    public static void cleanLocalBase(){
-        tournaments.clear();
+    public static void cleanDatabase(){
+        db.drop();
     }
 }

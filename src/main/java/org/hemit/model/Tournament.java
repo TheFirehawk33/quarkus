@@ -5,7 +5,7 @@ import io.quarkus.mongodb.panache.PanacheMongoEntity;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Tournament extends PanacheMongoEntity {
+public class Tournament {
     public String name;
     public List<Participant> participants = new ArrayList<>();
 

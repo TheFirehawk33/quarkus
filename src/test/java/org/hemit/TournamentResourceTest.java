@@ -20,7 +20,7 @@ public class TournamentResourceTest {
 
     @BeforeEach
     public void setup() {
-        TournamentRepository.cleanLocalBase();
+        TournamentRepository.cleanDatabase();
     }
 
     @Test

@@ -10,7 +10,7 @@ import com.mongodb.client.MongoDatabase;
 
 public class DatabaseConnection {
 
-    private MongoDatabase database;
+    private final MongoDatabase database;
 
     public DatabaseConnection() {
         ConnectionString connectionString = new ConnectionString("mongodb+srv://tournaments:prout@cluster0.ytl7e.mongodb.net/tournaments?retryWrites=true&w=majority");
