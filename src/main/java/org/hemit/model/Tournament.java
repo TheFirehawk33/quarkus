@@ -13,5 +13,19 @@ public class Tournament extends PanacheMongoEntity {
         this.name = name;
     }
 
-    public Tournament() { }
+    public Tournament() {
+    }
+
+    public String getName() {
+            return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void addParticipant(Participant participant) {
+        participants.add(participant);
+    }
+
 }

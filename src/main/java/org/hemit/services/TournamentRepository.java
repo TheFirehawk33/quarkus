@@ -40,7 +40,7 @@ public class TournamentRepository {
     {
         for(Tournament tournament : tournaments.values())
         {
-            if(tournament.name.equals(name))
+            if(tournament.getName().equals(name))
                 return tournament;
         }
         return null;
