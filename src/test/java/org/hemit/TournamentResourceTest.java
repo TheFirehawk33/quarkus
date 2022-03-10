@@ -65,7 +65,7 @@ public class TournamentResourceTest {
         StatusAndContent<Tournament> getResponse = TournamentUtils.getTournamentById(createResponse.content.id);
 
         assertThat(getResponse.statusCode, is(Response.Status.OK.getStatusCode()));
-        assertThat(getResponse.content.name, is(tournamentName));
+        assertThat(getResponse.content.getName(), is(tournamentName));
     }
 
     @Test
