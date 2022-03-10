@@ -1,7 +1,12 @@
 package org.hemit.services;
 
+import com.mongodb.BasicDBObject;
+import com.mongodb.DBObject;
+import com.mongodb.client.MongoCollection;
 import io.quarkus.mongodb.panache.PanacheMongoEntity;
-import io.quarkus.mongodb.panache.common.MongoEntity;
+import org.bson.Document;
+import org.bson.types.ObjectId;
+import org.hemit.api.DatabaseConnection;
 import org.hemit.model.Tournament;
 import org.hemit.model.TournamentToCreate;
 
@@ -9,25 +14,26 @@ import javax.enterprise.context.ApplicationScoped;
 import java.util.HashMap;
 import java.util.UUID;
 
-
-
 @ApplicationScoped
-@MongoEntity(collection="tournaments")
-public class TournamentRepository extends PanacheMongoEntity {
+public class TournamentRepository {
 
     private static final HashMap<String, Tournament> tournaments = new HashMap<>();
+    private static final MongoCollection<org.bson.Document> db = new DatabaseConnection()
+            .getDatabase()
+            .getCollection("tournaments");
 
     public static String create(TournamentToCreate tournament) {
         String id = UUID.randomUUID().toString();
         tournaments.put(id, new Tournament(tournament.name));
-        tournament.persist();
-        tournament.update();
+        db.insertOne(tournament.getJsonTournament());
 
         return id;
     }
 
     public static Tournament getById(String id) {
-        return tournaments.get(id);
+        Document doc = db.find(new Document("_id",new ObjectId(id))).first();
+
+        return doc != null ? new Tournament(doc.getString("name")) : null;
     }
 
     public static Tournament getByName(String name)
