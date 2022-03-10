@@ -35,7 +35,7 @@ public class TournamentUtils {
         int statusCode = response.extract().statusCode();
         Tournament content = null;
 
-        if(statusCode == Response.Status.FOUND.getStatusCode())
+        if(statusCode == Response.Status.OK.getStatusCode())
             content = response.extract().as(Tournament.class);
 
         return new StatusAndContent<>(statusCode, content);
