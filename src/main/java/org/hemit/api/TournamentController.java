@@ -37,7 +37,7 @@ public class TournamentController {
         Tournament result = tournamentRepository.getById(id);
         if(result == null)
             return Response.status(Response.Status.NOT_FOUND).build();
-        return Response.status(Response.Status.FOUND).entity(result).build();
+        return Response.status(Response.Status.OK).entity(result).build();
 
     }
 

@@ -13,13 +13,13 @@ import javax.ws.rs.core.Response;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @QuarkusTest
 public class TournamentResourceTest {
 
     @BeforeEach
-    public void setup()
-    {
+    public void setup() {
         TournamentRepository.cleanLocalBase();
     }
 
@@ -64,7 +64,7 @@ public class TournamentResourceTest {
         StatusAndContent<CreateResponse> createResponse = TournamentUtils.createTournament(tournamentName);
         StatusAndContent<Tournament> getResponse = TournamentUtils.getTournamentById(createResponse.content.id);
 
-        assertThat(getResponse.statusCode, is(Response.Status.FOUND.getStatusCode()));
+        assertThat(getResponse.statusCode, is(Response.Status.OK.getStatusCode()));
         assertThat(getResponse.content.name, is(tournamentName));
     }
 
@@ -76,11 +76,43 @@ public class TournamentResourceTest {
     }
 
     @Test
-    public void get_tournament_false_id_should_return_404(){
+    public void get_tournament_false_id_should_return_404() {
         StatusAndContent<Tournament> getResponse = TournamentUtils.getTournamentById("AAAAA");
 
         assertThat(getResponse.statusCode, is(404));
     }
+
+    @Test
+    public void get_listParticipant_NominalCase_withoutParticipants() {
+        StatusAndContent<CreateResponse> creationResponse = TournamentUtils.createTournament("Unreal Tournament");
+        StatusAndContent<Tournament> getResponse = TournamentUtils.getTournamentById(creationResponse.content.id);
+
+        assertThat(getResponse.statusCode, is(200));
+        assertTrue(getResponse.content.participants.isEmpty());
+
+    }
+
+    @Test
+    public void get_listParticipant_withUnknownId_should_returnNotFound() {
+        StatusAndContent<Tournament> response = TournamentUtils.getTournamentById("unknownId");
+
+        assertThat(response.statusCode, is(404));
+    }
+
+    @Test
+    public void get_listParticipant_withoutId_should_returnNotFound() {
+        StatusAndContent<Tournament> response = TournamentUtils.getTournamentById(null);
+
+        assertThat(response.statusCode, is(404));
+    }
+
+    @Test
+    public void get_listParticipant_emptyId_should_returnNotFound() {
+        StatusAndContent<Tournament> response = TournamentUtils.getTournamentById("");
+
+        assertThat(response.statusCode, is(405));
+    }
 }
+
 
 
