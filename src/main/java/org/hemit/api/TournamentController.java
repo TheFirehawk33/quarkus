@@ -4,6 +4,7 @@ import io.netty.util.internal.StringUtil;
 import io.quarkus.panache.common.Sort;
 import org.bson.types.ObjectId;
 import org.hemit.model.CreateResponse;
+import org.hemit.model.Participant;
 import org.hemit.model.Tournament;
 import org.hemit.services.TournamentRepository;
 
@@ -59,5 +60,4 @@ public class TournamentController {
 
         return Objects.isNull(tournamentRepository.findByName(tournament.name));
     }
-
 }

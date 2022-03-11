@@ -1,6 +1,7 @@
 package org.hemit.utils;
 
 import io.restassured.response.ValidatableResponse;
+import org.bson.types.ObjectId;
 import org.hemit.StatusAndContent;
 import org.hemit.model.CreateResponse;
 import org.hemit.model.Participant;
@@ -13,7 +14,7 @@ public class ParticipantUtils {
     public static StatusAndContent<CreateResponse> createParticipant(String participantName,int participantElo) {
         ValidatableResponse response = given()
                 .contentType("application/json")
-                .body(new Participant(participantName,participantElo))
+                .body(new Participant(participantName,participantElo,new ObjectId()))
                 .when()
                 .post("/participants")
                 .then();

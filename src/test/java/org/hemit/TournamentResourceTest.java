@@ -21,7 +21,7 @@ public class TournamentResourceTest {
     @BeforeEach
     public void setup() {
         TournamentRepository tournamentRepository = new TournamentRepository();
-        tournamentRepository.deleteAll();
+        //tournamentRepository.deleteAll();
     }
 
     @Test

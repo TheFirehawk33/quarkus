@@ -3,10 +3,8 @@ package org.hemit.api;
 
 import io.netty.util.internal.StringUtil;
 import org.bson.types.ObjectId;
-import org.hemit.model.CreateResponse;
 import org.hemit.model.Participant;
-import org.hemit.model.Tournament;
-import org.hemit.services.ParticipantRepository;
+import org.hemit.services.TournamentRepository;
 
 import javax.inject.Inject;
 import javax.ws.rs.*;
@@ -20,25 +18,28 @@ import java.util.Objects;
 public class ParticipantController {
 
     @Inject
-    ParticipantRepository participantRepository;
+    TournamentRepository tournamentRepository;
 
     @POST
-    public Response createParticipant(Participant participant) {
+    @Path("{tournamentId}")
+    public Response createParticipant(@PathParam("tournamentId") String tournamentId, Participant participant) {
 
         if (!validateParticipant(participant))
             return Response.status(Response.Status.BAD_REQUEST).build();
 
-        participantRepository.persist(participant);
+        //participantRepository.persist(participant);
+        participant.participantId = new ObjectId();
+        tournamentRepository.addParticipant(tournamentId, participant);
         return Response.status(Response.Status.CREATED).build();
     }
 
     @GET
-    @Path("{id}")
-    public Response getParticipantById(@PathParam("id") String id) {
-        Participant result = participantRepository.findById(new ObjectId(id));
-        if(result == null)
+    @Path("{tournamentId}/{participantId}")
+    public Response getParticipantById(@PathParam("participantId") String participantId, @PathParam("tournamentId") String tournamentId) {
+        //Participant result = participantRepository.findById(new ObjectId(id));
+        if(null == null)
             return Response.status(Response.Status.NOT_FOUND).build();
-        return Response.status(Response.Status.OK).entity(result).build();
+        return Response.status(Response.Status.OK).entity(null).build();
     }
 
     private boolean validateParticipant(Participant participant) {
@@ -49,6 +50,6 @@ public class ParticipantController {
         if (StringUtil.isNullOrEmpty(participant.name))
             return false;
 
-        return Objects.isNull(participantRepository.findByName(participant.name));
+        return Objects.isNull(tournamentRepository.findByName(participant.name));
     }
 }
